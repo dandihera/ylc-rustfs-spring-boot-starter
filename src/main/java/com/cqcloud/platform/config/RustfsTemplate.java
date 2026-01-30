@@ -35,7 +35,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import software.amazon.awssdk.services.s3.model.S3Object;
 
 /**
- * aws-s3 通用存储操作 支持所有兼容s3协议的云存储: {阿里云OSS，腾讯云COS，七牛云，京东云，minio,rustfs 等}
+ * aws-s3 通用存储操作 支持所有兼容s3协议的云存储: {阿里云OSS，腾讯云COS,天翼云oos，七牛云，京东云，rustfs 等}
  *
  * @author weimeilayer@gmail.com ✨
  * @date 💓💕2024年3月7日🐬🐇 💓💕
@@ -132,9 +132,13 @@ public class RustfsTemplate implements InitializingBean {
 	 */
 	public PutObjectResponse putObject(String bucketName, String objectName, InputStream stream, long size,
 			String contextType) throws Exception {
+		// 创建上传请求
 		byte[] bytes = new byte[(int) size];
+		// 读取文件
 		stream.read(bytes);
+		// 创建上传请求
 		RequestBody requestBody = RequestBody.fromBytes(bytes);
+		// 创建上传请求
 		PutObjectRequest request = PutObjectRequest.builder()
 			.bucket(bucketName)
 			.key(objectName)
@@ -158,14 +162,21 @@ public class RustfsTemplate implements InitializingBean {
 	 */
 	@Override
 	public void afterPropertiesSet() {
-
+		// 创建s3Client
 		S3ClientBuilder s3ClientBuilder = S3Client.builder()
+				// 设置endpoint
 			.endpointOverride(URI.create(ossProperties.getEndpoint()))
+				// 设置region
 			.region(Region.of(ossProperties.getRegion()))
+				// 设置访问密钥
 			.credentialsProvider(StaticCredentialsProvider
+					// 创建凭证
 				.create(AwsBasicCredentials.create(ossProperties.getAccessKey(), ossProperties.getSecretKey())))
+				// 配置
 			.serviceConfiguration(S3Configuration.builder()
+					// 关闭分片上传
 				.chunkedEncodingEnabled(false)
+					// 启用路径访问
 				.pathStyleAccessEnabled(ossProperties.getPathStyleAccess())
 				.build());
 		this.s3Client = s3ClientBuilder.build();

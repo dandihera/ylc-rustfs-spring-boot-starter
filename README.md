@@ -5,9 +5,9 @@ https://blog.csdn.net/weimeilayer/article/details/149197572?spm=1011.2415.3001.5
 ## 引入依赖
 ```xml
 <dependency>
-    <groupId>io.github.mandala5741</groupId>
+    <groupId>cloud.cqcloud.platform</groupId>
     <artifactId>ylc-rustfs-spring-boot-starter</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.5</version>
 </dependency>
 ```
 ## x86镜像
@@ -24,8 +24,8 @@ docker run -d \              # 后台运行
   --name rustfs \           # 容器名称
   --restart=always \        # 自动重启
   --privileged=true \       # 特权模式
-  -p 9000:9000 \           # API端口
-  -p 9001:9001 \           # Web控制台端口
+  -p 10087:9000 \           # API端口
+  -p 10088:9001 \           # Web控制台端口
   -e RUSTFS_ACCESS_KEY=rustfsadmin \   # 访问密钥
   -e RUSTFS_SECRET_KEY=rustfsadmin \   # 秘密密钥
   -v /data/rustfs/data:/data \        # 数据持久化
@@ -43,8 +43,8 @@ echo "=== RustFS生产环境部署 ==="
 
 # 配置参数
 CONTAINER_NAME="rustfs"
-API_PORT="9000"
-CONSOLE_PORT="9001"
+API_PORT="10087"
+CONSOLE_PORT="10088"
 DATA_DIR="/data/rustfs"
 IMAGE="registry.cn-hangzhou.aliyuncs.com/qiluo-images/rustfs:latest"
 
@@ -196,7 +196,7 @@ COMMENT ON TABLE "public"."sys_file" IS '系统基本信息--文件管理信息�
 
 
 # yaml 配置文件
-minio:
+rustfs:
   endpoint: ENC(2ibwJTJtC9aSCwI+REN4up/bkWiPjWYei0XXqXv9dsD80cEkQ3BBbQ==)
   access-key: ENC(UbfMrajSAkV2JMRqVJdZTxwmQotPjhp9RZBjJ6ocd/4=)
   secret-key: ENC(ErfPLkmb/e6Bkq+4Yv9L/BnWkVmTtsMFnY03v0GgK9+LIbfZTcd0d2+6J8Pm5HJt)
@@ -204,9 +204,9 @@ minio:
   public-bucket-name: ENC(NHW2QW2iwf2YEWtiC95nf3gK4UDvwobBUQAB6nHfaPw=)
   preview-domain: ENC(F1qPbzbrpnpftyLw1TENQ9aMzNVGX269TQLXtqiEKqYBZ7XUx1aQPQ==)
 
-# 1.0.3版本
+# 1.0.5版本
 rustfs:
-  endpoint: http://192.168.1.100:9000
+  endpoint: http://192.168.1.100:10087
   access-key: minioadmin
   secret-key: minioadmin123
   bucket-name: app-private
@@ -215,10 +215,10 @@ rustfs:
 
 
 # 配置结构说明
-1. MinIO 连接配置
+1. rustfs 连接配置
    yaml
-   minio:
-   endpoint:       # MinIO 服务器地址（加密存储）
+   rustfs:
+   endpoint:       # rustfs 服务器地址（加密存储）
    access-key:     # 访问密钥（加密存储）
    secret-key:     # 秘密密钥（加密存储）
 2. 存储桶配置
@@ -228,7 +228,7 @@ rustfs:
    preview-domain:         # 文件预览域名（可能包含CDN地址）
 ### 配置项详细说明
    配置项	说明	示例值（解密后）
-   endpoint	MinIO 服务地址	http://minio.example.com:9000
+   endpoint	rustfs 服务地址	http://rustfs.example.com:10087
    access-key	访问密钥 ID	AKIAIOSFODNN7EXAMPLE
    secret-key	秘密访问密钥	wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
    bucket-name	默认存储桶名称	private-bucket

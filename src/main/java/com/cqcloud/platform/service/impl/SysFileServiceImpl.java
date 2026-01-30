@@ -79,13 +79,15 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
 		resultMap.put("fullFilePath", fullFilePath);
 		resultMap.put("previewById", String.format("/api/sysfile/preview/%s", fileId));
 		resultMap.put("url", String.format("/api/sysfile/previewByFileName/%s", fileName));
-		// resultMap.put("protocolUrl", String.format("%s/%s/%s",rustfsProperties.getPreviewDomain(), rustfsProperties.getBucketName(),fullFilePath));
+		// resultMap.put("protocolUrl",
+		// String.format("%s/%s/%s",rustfsProperties.getPreviewDomain(),
+		// rustfsProperties.getBucketName(),fullFilePath));
 		try (InputStream inputStream = file.getInputStream()) {
 			// 上传文件到 rustfs
-            rustfsTemplate.putObject(rustfsProperties.getBucketName(), fullFilePath, inputStream, file.getSize(),
+			rustfsTemplate.putObject(rustfsProperties.getBucketName(), fullFilePath, inputStream, file.getSize(),
 					file.getContentType());
 			// 文件管理数据记录
-            rustfsInsertToDb(file, fileId, fileName, originalFilename, suffix, groupId, fullFilePath, sort);
+			rustfsInsertToDb(file, fileId, fileName, originalFilename, suffix, groupId, fullFilePath, sort);
 		}
 		catch (BizException e) {
 			throw e;
@@ -123,7 +125,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
 	@Transactional(rollbackFor = Exception.class)
 	public Boolean deleteFile(String id) {
 		SysFile file = this.getById(id);
-        rustfsTemplate.removeObject(rustfsProperties.getBucketName(), file.getName());
+		rustfsTemplate.removeObject(rustfsProperties.getBucketName(), file.getName());
 		return this.removeById(file);
 	}
 

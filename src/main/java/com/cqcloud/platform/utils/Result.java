@@ -39,14 +39,29 @@ public class Result<T> implements Serializable {
 
 	public static final int NOT_FOUND_CODE = 404;
 
+	/**
+	 * 状态码
+	 */
 	@Schema(description = "返回标记: 200=success, 400=failure, 500=error", example = "200")
 	private Integer code;
 
+	/**
+	 * 返回信息
+	 */
 	@Schema(description = "返回信息")
 	private String msg;
 
+	/**
+	 * 数据
+	 */
 	@Schema(description = "数据")
 	private T data;
+
+	/**
+	 * 时间戳
+	 */
+	@Schema(description = "时间戳")
+	private Long timestamp;
 
 	public static <T> Result<T> ok() {
 		return of(SUCCESS_CODE, null, null);
@@ -58,10 +73,6 @@ public class Result<T> implements Serializable {
 
 	public static <T> Result<T> ok(T data, String msg) {
 		return of(SUCCESS_CODE, msg, data);
-	}
-
-	public static <T> Result<T> success(String msg) {
-		return of(SUCCESS_CODE, msg, null);
 	}
 
 	public static <T> Result<T> fail() {
@@ -101,23 +112,7 @@ public class Result<T> implements Serializable {
 	}
 
 	public static <T> Result<T> of(int code, String msg, T data) {
-		Result<T> result = new Result<>();
-		result.setCode(code);
-		result.setMsg(msg);
-		result.setData(data);
-		return result;
-	}
-
-	public boolean isSuccess() {
-		return Objects.equals(code, SUCCESS_CODE);
-	}
-
-	public boolean isFailure() {
-		return Objects.equals(code, FAILURE_CODE);
-	}
-
-	public boolean isError() {
-		return Objects.equals(code, ERROR_CODE);
+		return Result.<T>builder().code(code).msg(msg).data(data).timestamp(System.currentTimeMillis()).build();
 	}
 
 }

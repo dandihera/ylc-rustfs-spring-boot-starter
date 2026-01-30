@@ -29,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * 系统基础信息--文件管理模块
+ *
  * @author weimeilayer@gmail.com
  * @date 💓💕2021年12月13日🐬🐇💓💕
  */
@@ -96,4 +97,5 @@ public class SysFileController {
 	public void previewByFileName(@PathVariable("fileName") String fileName, HttpServletResponse response) {
 		sysFileService.previewByFileName(fileName, response);
 	}
+
 }

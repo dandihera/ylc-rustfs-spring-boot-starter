@@ -52,7 +52,6 @@ public class RustfsTemplate implements InitializingBean {
 
 	/**
 	 * 创建bucket
-	 * 
 	 * @param bucketName bucket名称
 	 */
 	@SneakyThrows
@@ -80,7 +79,6 @@ public class RustfsTemplate implements InitializingBean {
 
 	/**
 	 * 删除bucket
-	 * 
 	 * @param bucketName bucket名称
 	 */
 	@SneakyThrows
@@ -90,10 +88,9 @@ public class RustfsTemplate implements InitializingBean {
 
 	/**
 	 * 根据文件前缀查询文件
-	 * 
 	 * @param bucketName bucket名称
-	 * @param prefix     前缀
-	 * @param recursive  是否递归查询
+	 * @param prefix 前缀
+	 * @param recursive 是否递归查询
 	 * @return S3ObjectSummary 列表
 	 */
 	public List<S3Object> getAllObjectsByPrefix(String bucketName, String prefix, boolean recursive) {
@@ -107,7 +104,6 @@ public class RustfsTemplate implements InitializingBean {
 
 	/**
 	 * 获取文件
-	 * 
 	 * @param bucketName bucket名称
 	 * @param objectName 文件名称
 	 * @return 二进制流
@@ -118,10 +114,9 @@ public class RustfsTemplate implements InitializingBean {
 
 	/**
 	 * 上传文件
-	 * 
 	 * @param bucketName bucket名称
 	 * @param objectName 文件名称
-	 * @param stream     文件流
+	 * @param stream 文件流
 	 */
 	public void putObject(String bucketName, String objectName, InputStream stream) throws Exception {
 		putObject(bucketName, objectName, stream, stream.available(), MediaType.APPLICATION_OCTET_STREAM_VALUE);
@@ -129,11 +124,10 @@ public class RustfsTemplate implements InitializingBean {
 
 	/**
 	 * 上传文件
-	 * 
-	 * @param bucketName  bucket名称
-	 * @param objectName  文件名称
-	 * @param stream      文件流
-	 * @param size        大小
+	 * @param bucketName bucket名称
+	 * @param objectName 文件名称
+	 * @param stream 文件流
+	 * @param size 大小
 	 * @param contextType 类型
 	 */
 	public PutObjectResponse putObject(String bucketName, String objectName, InputStream stream, long size,
@@ -141,14 +135,17 @@ public class RustfsTemplate implements InitializingBean {
 		byte[] bytes = new byte[(int) size];
 		stream.read(bytes);
 		RequestBody requestBody = RequestBody.fromBytes(bytes);
-		PutObjectRequest request = PutObjectRequest.builder().bucket(bucketName).key(objectName).contentLength(size)
-				.contentType(contextType).build();
+		PutObjectRequest request = PutObjectRequest.builder()
+			.bucket(bucketName)
+			.key(objectName)
+			.contentLength(size)
+			.contentType(contextType)
+			.build();
 		return s3Client.putObject(request, requestBody);
 	}
 
 	/**
 	 * 删除文件
-	 * 
 	 * @param bucketName bucket名称
 	 * @param objectName 文件名称
 	 */
@@ -162,12 +159,16 @@ public class RustfsTemplate implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() {
 
-		S3ClientBuilder s3ClientBuilder = S3Client.builder().endpointOverride(URI.create(ossProperties.getEndpoint()))
-				.region(Region.of(ossProperties.getRegion()))
-				.credentialsProvider(StaticCredentialsProvider
-						.create(AwsBasicCredentials.create(ossProperties.getAccessKey(), ossProperties.getSecretKey())))
-				.serviceConfiguration(S3Configuration.builder().chunkedEncodingEnabled(false)
-						.pathStyleAccessEnabled(ossProperties.getPathStyleAccess()).build());
+		S3ClientBuilder s3ClientBuilder = S3Client.builder()
+			.endpointOverride(URI.create(ossProperties.getEndpoint()))
+			.region(Region.of(ossProperties.getRegion()))
+			.credentialsProvider(StaticCredentialsProvider
+				.create(AwsBasicCredentials.create(ossProperties.getAccessKey(), ossProperties.getSecretKey())))
+			.serviceConfiguration(S3Configuration.builder()
+				.chunkedEncodingEnabled(false)
+				.pathStyleAccessEnabled(ossProperties.getPathStyleAccess())
+				.build());
 		this.s3Client = s3ClientBuilder.build();
 	}
+
 }

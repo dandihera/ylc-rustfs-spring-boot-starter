@@ -1,9 +1,9 @@
 plugins {
-	id 'java-library'
-	id 'maven-publish'
-	id 'signing'
-	id 'io.spring.dependency-management' version '1.1.7'
-	id 'io.spring.javaformat' version '0.0.47'
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'io.spring.javaformat' version '0.0.47'
 }
 
 group = 'cloud.cqcloud.platform'
@@ -11,136 +11,137 @@ version = '1.0.5'
 description = '国产化Rustfs对象存储 Spring Boot Starter'
 
 ext {
-	hutoolVersion = '5.8.43'
-	amazonVersion = '2.41.18'
-	knife4jVersion = '4.5.0'
-	springBootVersion = '3.5.10'
-	mybatisPlusVersion = '3.5.16'
-	commonsLang3Version = '3.20.0'
+    hutoolVersion = '5.8.43'
+    amazonVersion = '2.41.18'
+    knife4jVersion = '4.5.0'
+    springBootVersion = '3.5.10'
+    mybatisFlexVersion = '1.11.7'
+    commonsLang3Version = '3.20.0'
 }
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
-	withSourcesJar()
-	withJavadocJar()
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+    withSourcesJar()
+    withJavadocJar()
 }
 
 dependencyManagement {
-	imports {
-		mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
-	}
-	dependencies {
-		dependency "org.apache.commons:commons-lang3:${commonsLang3Version}"
-	}
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+    }
+    dependencies {
+        dependency "org.apache.commons:commons-lang3:${commonsLang3Version}"
+    }
 }
 
 dependencies {
-	api "cn.hutool:hutool-json:${hutoolVersion}"
-	api "software.amazon.awssdk:s3:${amazonVersion}"
-	api 'org.springframework.boot:spring-boot-starter'
-	api "org.apache.commons:commons-lang3:${commonsLang3Version}"
-	api "com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter:${knife4jVersion}"
+    api "cn.hutool:hutool-json:${hutoolVersion}"
+    api "software.amazon.awssdk:s3:${amazonVersion}"
+    api 'org.springframework.boot:spring-boot-starter'
+    api "org.apache.commons:commons-lang3:${commonsLang3Version}"
+    api "com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter:${knife4jVersion}"
 
-	compileOnlyApi "com.baomidou:mybatis-plus-boot-starter:${mybatisPlusVersion}"
-	compileOnlyApi 'org.springframework.boot:spring-boot-starter-web'
+    compileOnlyApi "com.mybatis-flex:mybatis-flex-spring-boot3-starter:${mybatisFlexVersion}"
+    compileOnlyApi 'org.springframework.boot:spring-boot-starter-web'
 
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "com.mybatis-flex:mybatis-flex-processor:${mybatisFlexVersion}"
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.withType(JavaCompile).configureEach {
-	options.encoding = 'UTF-8'
-	options.release = 17
+    options.encoding = 'UTF-8'
+    options.release = 17
 }
 
 tasks.withType(Javadoc).configureEach {
-	options.encoding = 'UTF-8'
-	options.charSet = 'UTF-8'
-	options.addBooleanOption('Xdoclint:none', true)
-	options.noHelp = true
-	failOnError = false
+    options.encoding = 'UTF-8'
+    options.charSet = 'UTF-8'
+    options.addBooleanOption('Xdoclint:none', true)
+    options.noHelp = true
+    failOnError = false
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
 
-			pom {
-				name = 'Rustfs Spring Boot Starter'
-				description = project.description
-				url = 'https://github.com/mandala5741/ylc-rustfs-spring-boot-starter'
+            pom {
+                name = 'Rustfs Spring Boot Starter'
+                description = project.description
+                url = 'https://github.com/mandala5741/ylc-rustfs-spring-boot-starter'
 
-				licenses {
-					license {
-						name = 'The Apache Software License, Version 2.0'
-						url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-						distribution = 'repo'
-					}
-				}
+                licenses {
+                    license {
+                        name = 'The Apache Software License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution = 'repo'
+                    }
+                }
 
-				developers {
-					developer {
-						name = 'Pandora-D'
-						email = 'weimeilayer@gmail.com'
-						organization = 'Mandala'
-						organizationUrl = 'https://github.com/mandala5741'
-					}
-				}
+                developers {
+                    developer {
+                        name = 'Pandora-D'
+                        email = 'weimeilayer@gmail.com'
+                        organization = 'Mandala'
+                        organizationUrl = 'https://github.com/mandala5741'
+                    }
+                }
 
-				scm {
-					url = 'https://github.com/mandala5741/ylc-rustfs-spring-boot-starter'
-					connection = 'scm:git:https://github.com/mandala5741/ylc-rustfs-spring-boot-starter.git'
-					developerConnection = 'scm:git:https://github.com/mandala5741/ylc-rustfs-spring-boot-starter.git'
-				}
+                scm {
+                    url = 'https://github.com/mandala5741/ylc-rustfs-spring-boot-starter'
+                    connection = 'scm:git:https://github.com/mandala5741/ylc-rustfs-spring-boot-starter.git'
+                    developerConnection = 'scm:git:https://github.com/mandala5741/ylc-rustfs-spring-boot-starter.git'
+                }
 
-				withXml {
-					def dependenciesNode = asNode().get('dependencies')?.getAt(0)
-					if (dependenciesNode == null) {
-						dependenciesNode = asNode().appendNode('dependencies')
-					}
+                withXml {
+                    def dependenciesNode = asNode().get('dependencies')?.getAt(0)
+                    if (dependenciesNode == null) {
+                        dependenciesNode = asNode().appendNode('dependencies')
+                    }
 
-					[
-						['com.baomidou', 'mybatis-plus-boot-starter', mybatisPlusVersion],
-						['org.springframework.boot', 'spring-boot-starter-web', null]
-					].each {
-						def dependencyNode = dependenciesNode.appendNode('dependency')
-						dependencyNode.appendNode('groupId', it[0])
-						dependencyNode.appendNode('artifactId', it[1])
-						if (it[2] != null) {
-							dependencyNode.appendNode('version', it[2])
-						}
-						dependencyNode.appendNode('optional', 'true')
-					}
-				}
-			}
-		}
-	}
+                    [
+                            ['com.mybatis-flex', 'mybatis-flex-spring-boot3-starter', mybatisFlexVersion],
+                            ['org.springframework.boot', 'spring-boot-starter-web', null]
+                    ].each {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it[0])
+                        dependencyNode.appendNode('artifactId', it[1])
+                        if (it[2] != null) {
+                            dependencyNode.appendNode('version', it[2])
+                        }
+                        dependencyNode.appendNode('optional', 'true')
+                    }
+                }
+            }
+        }
+    }
 
-	repositories {
-		maven {
-			name = 'central'
-			url = uri('https://central.sonatype.com/api/v1/publisher')
-			credentials {
-				username = findProperty('centralUsername') ?: System.getenv('CENTRAL_USERNAME')
-				password = findProperty('centralPassword') ?: System.getenv('CENTRAL_PASSWORD')
-			}
-		}
-	}
+    repositories {
+        maven {
+            name = 'central'
+            url = uri('https://central.sonatype.com/api/v1/publisher')
+            credentials {
+                username = findProperty('centralUsername') ?: System.getenv('CENTRAL_USERNAME')
+                password = findProperty('centralPassword') ?: System.getenv('CENTRAL_PASSWORD')
+            }
+        }
+    }
 }
 
 signing {
-	required {
-		gradle.taskGraph.hasTask('publish') || gradle.taskGraph.hasTask('publishMavenJavaPublicationToCentralRepository')
-	}
-	sign publishing.publications.mavenJava
+    required {
+        gradle.taskGraph.hasTask('publish') || gradle.taskGraph.hasTask('publishMavenJavaPublicationToCentralRepository')
+    }
+    sign publishing.publications.mavenJava
 }

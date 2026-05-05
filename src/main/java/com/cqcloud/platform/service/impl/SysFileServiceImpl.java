@@ -3,10 +3,6 @@ package com.cqcloud.platform.service.impl;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cqcloud.platform.exception.BizException;
 
 import com.cqcloud.platform.config.RustfsProperties;
@@ -17,6 +13,9 @@ import com.cqcloud.platform.mapper.SysFileMapper;
 import com.cqcloud.platform.service.SysFileService;
 import com.cqcloud.platform.vo.SysFileVo;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.spring.service.impl.ServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +30,10 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -116,6 +117,8 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
 		sysFile.setVisitCount(0);
 		sysFile.setSort(sort);
 		sysFile.setTenantId(1L);
+		sysFile.setDelFlag("0");
+		sysFile.setGmtCreate(LocalDateTime.now());
 		if (!this.save(sysFile)) {
 			throw new BizException("上传失败");
 		}
@@ -125,13 +128,18 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
 	@Transactional(rollbackFor = Exception.class)
 	public Boolean deleteFile(String id) {
 		SysFile file = this.getById(id);
+		if (Objects.isNull(file)) {
+			return false;
+		}
 		rustfsTemplate.removeObject(rustfsProperties.getBucketName(), file.getName());
-		return this.removeById(file);
+		return this.removeById(id);
 	}
 
 	@Override
-	public IPage<SysFileVo> getSysFileVoPage(Page<?> page, SysFileSelDto dto) {
-		return baseMapper.getSysFileVoPage(page, dto);
+	public Page<SysFileVo> getSysFileVoPage(Page<SysFileVo> page, SysFileSelDto dto) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("query", dto);
+		return mapper.xmlPaginate("getSysFileVoPage", page, params);
 	}
 
 	@Override
@@ -238,7 +246,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
 	@Override
 	public void previewByFileName(String fileName, HttpServletResponse response) {
 		// 1. 根据文件ID查找文件的元数据
-		SysFile sf = this.getOne(Wrappers.<SysFile>lambdaQuery().eq(SysFile::getObjectName, fileName));
+		SysFile sf = this.getOne(QueryWrapper.create().eq(SysFile::getObjectName, fileName));
 		if (Objects.isNull(sf)) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;

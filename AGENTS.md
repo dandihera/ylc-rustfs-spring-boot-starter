@@ -6,7 +6,7 @@
 
 - `config/`: RustFS 속성, 템플릿, Knife4j 설정
 - `controller/`, `service/`, `service/impl/`: 파일 작업을 위한 HTTP 및 비즈니스 로직
-- `mapper/` 및 `src/main/resources/mapper/`: MyBatis-Plus 매퍼 인터페이스와 XML SQL 매핑
+- `mapper/` 및 `src/main/resources/mapper/`: MyBatis-Flex 매퍼 인터페이스와 XML SQL 매핑
 - `entity/`, `dto/`, `vo/`: 영속성 모델, 요청 DTO, 응답/뷰 객체
 - `utils/` 및 `exception/`: 공통 결과 래퍼와 도메인 예외 타입
 

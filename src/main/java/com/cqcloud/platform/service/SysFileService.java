@@ -4,12 +4,11 @@ import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.cqcloud.platform.dto.SysFileSelDto;
 import com.cqcloud.platform.entity.SysFile;
 import com.cqcloud.platform.vo.SysFileVo;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.service.IService;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -51,7 +50,7 @@ public interface SysFileService extends IService<SysFile> {
 	 * @param dto 查询参数
 	 * @return 分页列表
 	 */
-	IPage<SysFileVo> getSysFileVoPage(Page<?> page, SysFileSelDto dto);
+	Page<SysFileVo> getSysFileVoPage(Page<SysFileVo> page, SysFileSelDto dto);
 
 	/**
 	 * 读取文件

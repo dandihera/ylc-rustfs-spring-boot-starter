@@ -1,12 +1,14 @@
 package com.cqcloud.platform.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
+import com.mybatisflex.annotation.Table;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -16,15 +18,14 @@ import java.time.LocalDateTime;
  * @date 2021-12-13 16:28:32
  */
 @Data
-@TableName("public.sys_file")
-@EqualsAndHashCode(callSuper = false)
+@Table(value = "sys_file", schema = "public")
 @Schema(description = "系统基础信息--文件管理表")
-public class SysFile extends Model<SysFile> {
+public class SysFile implements Serializable {
 
 	@Serial
 	private static final long serialVersionUID = 1L;
 
-	@TableId(value = "id", type = IdType.ASSIGN_ID)
+	@Id(keyType = KeyType.None)
 	@Schema(description = "主键ID")
 	private String id;
 
@@ -73,24 +74,19 @@ public class SysFile extends Model<SysFile> {
 	@Schema(description = "所属租户")
 	private Long tenantId;
 
-	@TableLogic
-	@TableField(fill = FieldFill.INSERT)
+	@Column(isLogicDelete = true)
 	@Schema(description = "删除标记,1:已删除,0:正常")
 	private String delFlag;
 
-	@TableField(fill = FieldFill.INSERT)
 	@Schema(description = "创建人")
 	private String createBy;
 
-	@TableField(fill = FieldFill.UPDATE)
 	@Schema(description = "编辑人")
 	private String updateBy;
 
-	@TableField(fill = FieldFill.INSERT)
 	@Schema(description = "创建时间")
 	private LocalDateTime gmtCreate;
 
-	@TableField(fill = FieldFill.UPDATE)
 	@Schema(description = "编辑时间")
 	private LocalDateTime gmtModified;
 

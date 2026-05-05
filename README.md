@@ -217,7 +217,7 @@ COMMENT ON COLUMN "public"."sys_file"."gmt_create" IS '생성 시간';
 COMMENT ON COLUMN "public"."sys_file"."gmt_modified" IS '수정 시간';
 COMMENT ON COLUMN "public"."sys_file"."create_by" IS '생성자 ID';
 COMMENT ON COLUMN "public"."sys_file"."update_by" IS '수정자 ID';
-COMMENT ON COLUMN "public"."sys_file"."del_flag" IS '논리 삭제 플래그(0: 미삭제, null: 삭제)';
+COMMENT ON COLUMN "public"."sys_file"."del_flag" IS '논리 삭제 플래그(0: 미삭제, 1: 삭제)';
 COMMENT ON COLUMN "public"."sys_file"."tenant_id" IS '소속 테넌트';
 COMMENT ON COLUMN "public"."sys_file"."original" IS '원본 파일명';
 COMMENT ON TABLE "public"."sys_file" IS '시스템 기본 정보 - 파일 관리 정보 테이블';

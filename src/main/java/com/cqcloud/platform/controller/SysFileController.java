@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cqcloud.platform.dto.SysFileSelDto;
 import com.cqcloud.platform.service.SysFileService;
 import com.cqcloud.platform.utils.Result;
 import com.cqcloud.platform.vo.SysFileVo;
+import com.mybatisflex.core.paginate.Page;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -50,7 +49,7 @@ public class SysFileController {
 	 */
 	@GetMapping("/pagelist")
 	@Operation(summary = "分页查询文件信息", description = "分页查询文件信息")
-	public Result<IPage<SysFileVo>> getSysFileVoPage(@ParameterObject Page<?> page,
+	public Result<Page<SysFileVo>> getSysFileVoPage(@ParameterObject Page<SysFileVo> page,
 			@ParameterObject SysFileSelDto dto) {
 		return Result.ok(sysFileService.getSysFileVoPage(page, dto));
 	}

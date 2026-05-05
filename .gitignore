@@ -16,6 +16,9 @@ hs_err_pid*
 *.iml
 
 /target/
+/build/
+/.gradle/
+/out/
 
 .classpath
 .settings

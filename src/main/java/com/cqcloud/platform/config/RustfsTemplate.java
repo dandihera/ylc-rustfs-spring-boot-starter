@@ -164,19 +164,19 @@ public class RustfsTemplate implements InitializingBean {
 	public void afterPropertiesSet() {
 		// 创建s3Client
 		S3ClientBuilder s3ClientBuilder = S3Client.builder()
-				// 设置endpoint
+			// 设置endpoint
 			.endpointOverride(URI.create(ossProperties.getEndpoint()))
-				// 设置region
+			// 设置region
 			.region(Region.of(ossProperties.getRegion()))
-				// 设置访问密钥
+			// 设置访问密钥
 			.credentialsProvider(StaticCredentialsProvider
-					// 创建凭证
+				// 创建凭证
 				.create(AwsBasicCredentials.create(ossProperties.getAccessKey(), ossProperties.getSecretKey())))
-				// 配置
+			// 配置
 			.serviceConfiguration(S3Configuration.builder()
-					// 关闭分片上传
+				// 关闭分片上传
 				.chunkedEncodingEnabled(false)
-					// 启用路径访问
+				// 启用路径访问
 				.pathStyleAccessEnabled(ossProperties.getPathStyleAccess())
 				.build());
 		this.s3Client = s3ClientBuilder.build();
